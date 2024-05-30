@@ -4,6 +4,50 @@
   
     
     <entry>
+      <title>Android多线程通信—Handler机制</title>
+      <link href="/posts/6885acd9.html"/>
+      <url>/posts/6885acd9.html</url>
+      
+        <content type="html"><![CDATA[<h1 id="Handler异步通信系统"><a href="#Handler异步通信系统" class="headerlink" title="Handler异步通信系统"></a>Handler异步通信系统</h1><ul><li>Handler机制主要的几个角色：Handler、Message、Looper、MessageQueue</li><li><p>主线程在一开始就建立了这么一套系统</p><h2 id="Handler消息机制"><a href="#Handler消息机制" class="headerlink" title="Handler消息机制"></a>Handler消息机制</h2><p><img src="/Android/img/Handler1.png" alt="示例图片" style="zoom:50%;" /></p></li><li><p>以Handler的sendMessage方法为例，当发送一个消息后，会将此消息加入消息队列MessageQueue中。</p></li><li>Looper负责去遍历消息队列并且将队列中的消息分发给对应的Handler进行处理。</li><li>在Handler的handleMessage方法中处理该消息，这就完成了一个消息的发送和处理过程。</li></ul><h3 id="子线程向主线程发送一个更新UI的数据"><a href="#子线程向主线程发送一个更新UI的数据" class="headerlink" title="子线程向主线程发送一个更新UI的数据"></a>子线程向主线程发送一个更新UI的数据</h3><p>```shell</p><p>首先在Maintivity中穿件一个耗时任务：从网络中获取一个字符串<br>    public void start(View view) {<br>        //做一个耗时任务<br>        new Thread(new Runnable() {<br>            @Override<br>            public void run() {<br>                //执行耗时任务<br>                String stringFromNet = getStringFromNet();<br>                Message message = new Message();<br>                message.what = 0; //区分是谁发的消息的<br>                message.obj = stringFromNet;//要发送的消息<br>                mHandler.sendMessage(message); //发送消息<br>            }</p><pre><code>    &#125;).start();    Toast.makeText(this, &quot;任务完成&quot;, Toast.LENGTH_SHORT).show();&#125;private String getStringFromNet() &#123;    //耗时任务假装从网络上获取一个字符串    return &quot;你好&quot;;&#125;</code></pre><p>其次，子线程中执行的耗时任务得到的字符串，要求进行UI更新，于是用Handler进行接收数据<br>private Handler mHandler = new Handler(Looper.myLooper()) {<br>        @Override<br>        public void handleMessage(@NonNull Message msg) {<br>            super.handleMessage(msg); //接受消息<br>            if (msg.what == 0) {<br>                String strData = (String) msg.obj;<br>                tvContent.setText(strData);<br>            }</p><pre><code>    &#125;&#125;;</code></pre><p>```</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Handler机制 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Android中的异步任务与多线程</title>
+      <link href="/posts/7b83ddff.html"/>
+      <url>/posts/7b83ddff.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="Android中的异步任务与多线程"><a href="#Android中的异步任务与多线程" class="headerlink" title="Android中的异步任务与多线程"></a>Android中的异步任务与多线程</h2><h3 id="Android中的多线程：主线程与子线程"><a href="#Android中的多线程：主线程与子线程" class="headerlink" title="Android中的多线程：主线程与子线程"></a>Android中的多线程：主线程与子线程</h3><p>类比到我们Android app程序。App一启动，本身就是一个线程，这个线程被称为主线程mainThread,负责显示界面,<br>跟用户交互。<br>另外，界面通常被称为UI (User Interface)，因此，主线程也被称为是UI线程。</p><p>两个原则:</p><ul><li>主线程不能执行网络请求/文件读写等耗时操作</li><li>子线程不能执行UI刷新</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Android </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Android </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>hello Java</title>
       <link href="/posts/3a137f07.html"/>
       <url>/posts/3a137f07.html</url>
@@ -29,25 +73,6 @@
     
     
     <entry>
-      <title>第一篇java文章</title>
-      <link href="/posts/5c2fafc7.html"/>
-      <url>/posts/5c2fafc7.html</url>
-      
-        <content type="html"><![CDATA[<h2 id="这是我的第一篇Java文章"><a href="#这是我的第一篇Java文章" class="headerlink" title="这是我的第一篇Java文章"></a>这是我的第一篇Java文章</h2>]]></content>
-      
-      
-      <categories>
-          
-          <category> Java </category>
-          
-      </categories>
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>第一篇android文章</title>
       <link href="/posts/5c2fafc7.html"/>
       <url>/posts/5c2fafc7.html</url>
@@ -58,6 +83,25 @@
       <categories>
           
           <category> Android </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>第一篇java文章</title>
+      <link href="/posts/5c2fafc7.html"/>
+      <url>/posts/5c2fafc7.html</url>
+      
+        <content type="html"><![CDATA[<h2 id="这是我的第一篇Java文章"><a href="#这是我的第一篇Java文章" class="headerlink" title="这是我的第一篇Java文章"></a>这是我的第一篇Java文章</h2>]]></content>
+      
+      
+      <categories>
+          
+          <category> Java </category>
           
       </categories>
       
@@ -134,17 +178,6 @@
     
     
     <entry>
-      <title>关于</title>
-      <link href="/about/index.html"/>
-      <url>/about/index.html</url>
-      
-        <content type="html"><![CDATA[<!--GitCalendar容器--><div id="gitZone"></div>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>categories</title>
       <link href="/categories/index.html"/>
       <url>/categories/index.html</url>
@@ -156,22 +189,11 @@
     
     
     <entry>
-      <title></title>
-      <link href="/css/coin.css"/>
-      <url>/css/coin.css</url>
+      <title>关于</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
       
-        <content type="html"><![CDATA[.tip-button {    border: 0;    border-radius: 0.25rem;    cursor: pointer;    font-size: 20px;    font-weight: 600;    height: 2.6rem;    margin-bottom: -4rem;    outline: 0;    position: relative;    top: 0;    transform-origin: 0% 100%;    transition: transform 50ms ease-in-out;    width: auto;    -webkit-tap-highlight-color: transparent;  }  .tip-button:active {    transform: rotate(4deg);  }  .tip-button.clicked {    animation: 150ms ease-in-out 1 shake;    pointer-events: none;  }  .tip-button.clicked .tip-button__text {    opacity: 0;    transition: opacity 100ms linear 200ms;  }  .tip-button.clicked::before {    height: 0.5rem;    width: 60%;    background: $button-hover-color;  }  .tip-button.clicked .coin {    transition: margin-bottom 1s linear 200ms;    margin-bottom: 0;  }  .tip-button.shrink-landing::before {    transition: width 200ms ease-in;    width: 0;  }  .tip-button.coin-landed::after {    opacity: 1;    transform: scale(1);    transform-origin: 50% 100%;  }  .tip-button.coin-landed .coin-wrapper {    background: radial-gradient(circle at 35% 97%, rgba(3, 16, 50, 0.4) 0.04rem, transparent 0.04rem), radial-gradient(        circle at 45% 92%,        rgba(3, 16, 50, 0.4) 0.04rem,        transparent 0.02rem      ), radial-gradient(circle at 55% 98%, rgba(3, 16, 50, 0.4) 0.04rem, transparent 0.04rem), radial-gradient(circle at          65% 96%, rgba(3, 16, 50, 0.4) 0.06rem, transparent 0.06rem);    background-position: center bottom;    background-size: 100%;    bottom: -1rem;    opacity: 0;    transform: scale(2) translateY(-10px);  }  .tip-button__text {    color: #fff;    margin-right: 1.8rem;    opacity: 1;    position: relative;    transition: opacity 100ms linear 500ms;    z-index: 3;  }  .tip-button::before {    border-radius: 0.25rem;    bottom: 0;    content: "";    display: block;    height: 100%;    left: 50%;    position: absolute;    transform: translateX(-50%);    transition: height 250ms ease-in-out 400ms, width 250ms ease-in-out 300ms;    width: 100%;    z-index: 2;  }  .tip-button::after {    bottom: -1rem;    color: white;    content: "ヾ(≧O≦)〃嗷~"; /*点击后显示的内容*/    height: 110%;    left: 0;    opacity: 0;    position: absolute;    pointer-events: none;    text-align: center;    transform: scale(0);    transform-origin: 50% 20%;    transition: transform 200ms cubic-bezier(0, 0, 0.35, 1.43);    width: 100%;    z-index: 1;  }    .coin-wrapper {    background: none;    bottom: 0;    height: 18rem;    left: 0;    opacity: 1;    overflow: hidden;    pointer-events: none;    position: absolute;    transform: none;    transform-origin: 50% 100%;    transition: opacity 200ms linear 100ms, transform 300ms ease-out;    width: 100%;  }    .coin {    --front-y-multiplier: 0;    --back-y-multiplier: 0;    --coin-y-multiplier: 0;    --coin-x-multiplier: 0;    --coin-scale-multiplier: 0;    --coin-rotation-multiplier: 0;    --shine-opacity-multiplier: 0.4;    --shine-bg-multiplier: 50%;    bottom: calc(var(--coin-y-multiplier) * 1rem - 3.5rem);    height: 3.5rem;    margin-bottom: 3.05rem;    position: absolute;    right: calc(var(--coin-x-multiplier) * 34% + 16%);    transform: translateX(50%) scale(calc(0.4 + var(--coin-scale-multiplier))) rotate(calc(var(              --coin-rotation-multiplier            ) * -1deg));    transition: opacity 100ms linear 200ms;    width: 3.5rem;    z-index: 3;  }  .coin__front,  .coin__middle,  .coin__back,  .coin::before,  .coin__front::after,  .coin__back::after {    border-radius: 50%;    box-sizing: border-box;    height: 100%;    left: 0;    position: absolute;    width: 100%;    z-index: 3;  }  .coin__front {    background: radial-gradient(circle at 50% 50%, transparent 50%, rgba(115, 124, 153, 0.4) 54%, #c2cadf 54%),      linear-gradient(210deg, #8590b3 32%, transparent 32%), linear-gradient(150deg, #8590b3 32%, transparent 32%),      linear-gradient(to right, #8590b3 22%, transparent 22%, transparent 78%, #8590b3 78%), linear-gradient(        to bottom,        #fcfaf9 44%,        transparent 44%,        transparent 65%,        #fcfaf9 65%,        #fcfaf9 71%,        #8590b3 71%      ), linear-gradient(to right, transparent 28%, #fcfaf9 28%, #fcfaf9 34%, #8590b3 34%, #8590b3 40%, #fcfaf9 40%, #fcfaf9          47%, #8590b3 47%, #8590b3 53%, #fcfaf9 53%, #fcfaf9 60%, #8590b3 60%, #8590b3 66%, #fcfaf9 66%, #fcfaf9 72%, transparent          72%);    background-color: #8590b3;    background-size: 100% 100%;    transform: translateY(calc(var(--front-y-multiplier) * 0.3181818182rem / 2)) scaleY(var(--front-scale-multiplier));  }  .coin__front::after {    background: rgba(0, 0, 0, 0.2);    content: "";    opacity: var(--front-y-multiplier);  }  .coin__middle {    background: #737c99;    transform: translateY(calc(var(--middle-y-multiplier) * 0.3181818182rem / 2)) scaleY(var(--middle-scale-multiplier));  }  .coin__back {    background: radial-gradient(circle at 50% 50%, transparent 50%, rgba(115, 124, 153, 0.4) 54%, #c2cadf 54%),      radial-gradient(circle at 50% 40%, #fcfaf9 23%, transparent 23%), radial-gradient(circle at 50% 100%, #fcfaf9 35%, transparent          35%);    background-color: #8590b3;    background-size: 100% 100%;    transform: translateY(calc(var(--back-y-multiplier) * 0.3181818182rem / 2)) scaleY(var(--back-scale-multiplier));  }  .coin__back::after {    background: rgba(0, 0, 0, 0.2);    content: "";    opacity: var(--back-y-multiplier);  }  .coin::before {    background: radial-gradient(circle at 25% 65%, transparent 50%, rgba(255, 255, 255, 0.9) 90%), linear-gradient(55deg, transparent          calc(var(--shine-bg-multiplier) + 0%), #e9f4ff calc(var(--shine-bg-multiplier) + 0%), transparent calc(var(                --shine-bg-multiplier              ) + 50%));    content: "";    opacity: var(--shine-opacity-multiplier);    transform: translateY(calc(var(--middle-y-multiplier) * 0.3181818182rem / -2)) scaleY(var(--middle-scale-multiplier))      rotate(calc(var(--coin-rotation-multiplier) * 1deg));    z-index: 10;  }  .coin::after {    background: #737c99;    content: "";    height: 0.3181818182rem;    left: 0;    position: absolute;    top: 50%;    transform: translateY(-50%);    width: 100%;    z-index: 2;  }    @keyframes shake {    0% {      transform: rotate(4deg);    }    66% {      transform: rotate(-4deg);    }    100% {      transform: rotate();    }  }]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
-      <link href="/css/custom.css"/>
-      <url>/css/custom.css</url>
-      
-        <content type="html"><![CDATA[:root {  --trans-light: rgba(255, 255, 255, 0.88);  --trans-dark: rgba(25, 25, 25, 0.88);  --border-style: 1px solid rgb(169, 169, 169);  --backdrop-filter: blur(5px) saturate(150%);}/* 页脚与头图透明 */#footer {    background: transparent !important;  }  #page-header {    background: transparent !important;  }    /* 白天模式遮罩透明 */  #footer::before {    background: transparent !important;  }  #page-header::before {    background: transparent !important;  }    /* 夜间模式遮罩透明 */  [data-theme="dark"] #footer::before {    background: transparent !important;  }  [data-theme="dark"] #page-header::before {    background: transparent !important;  }  /* 小冰分类分类磁铁黑夜模式适配 *//* 一般状态 */ [data-theme="dark"] .magnet_link_context {  background: #1e1e1e;  color: antiquewhite;}/* 鼠标悬浮状态 */ [data-theme="dark"] .magnet_link_context:hover {  background: #3ecdf1;  color: #f2f2f2;}@font-face {  /* 为载入的字体取名字(随意) */  font-family: 'YSHST';  /* 字体文件地址(相对或者绝对路径都可以) */  src: url(/font/优设好身体.ttf);  /* 定义加粗样式(加粗多少) */  font-weight: normal;  /* 定义字体样式(斜体/非斜体) */  font-style: normal;  /* 定义显示样式 */  font-display: block;}/* 翻页按钮居中 */#pagination {  width: 100%;  margin: auto;}/* 一级菜单居中 */#nav .menus_items {  position: absolute !important;  width: fit-content !important;  left: 50% !important;  transform: translateX(-50%) !important;}/* 子菜单横向展示 */#nav .menus_items .menus_item:hover .menus_item_child {  display: flex !important;}/* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */.menus_items .menus_item:nth-child(5) .menus_item_child {  left: -38px;}/* 夜间模式菜单栏发光字 */[data-theme="dark"] #nav .site-page,[data-theme="dark"] #nav .menus_items .menus_item .menus_item_child li a {  /* text-shadow: 0 0 2px var(--theme-color) !important; */  text-shadow: 0 0 2px rgb(179,71,241) !important;}/* 手机端适配 */[data-theme="dark"] #sidebar #sidebar-menus .menus_items .site-page {  /* text-shadow: 0 0 2px var(--theme-color) !important; */  text-shadow: 0 0 2px rgb(179,71,241) !important;}/* 闪烁变动颜色连续渐变 */#site-name,#site-title,#site-subtitle,#post-info,.author-info__name,.author-info__description {  transition: text-shadow 1s linear !important;}/* 侧边栏个人信息卡片动态渐变色 */#aside-content > .card-widget.card-info {  background: linear-gradient(    -45deg,    #e8d8b9,    #eccec5,    #a3e9eb,    #bdbdf0,    #eec1ea  );  box-shadow: 0 0 5px rgb(66, 68, 68);  position: relative;  background-size: 400% 400%;  -webkit-animation: Gradient 10s ease infinite;  -moz-animation: Gradient 10s ease infinite;  animation: Gradient 10s ease infinite !important;}@-webkit-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@-moz-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}/* 黑夜模式适配 */[data-theme="dark"] #aside-content > .card-widget.card-info {  background: #191919ee;}/* 个人信息Follow me按钮 */#aside-content > .card-widget.card-info > #card-info-btn {  background-color: #3eb8be;  border-radius: 8px;}/* 鼠标样式 */#cursor {  position: fixed;  width: 16px;  height: 16px;  /* 这里改变跟随的底色 */  background: rgb(57,197,187);  border-radius: 8px;  opacity: 0.25;  z-index: 10086;  pointer-events: none;  transition: 0.2s ease-in-out;  transition-property: background, opacity, transform;}#cursor.hidden {  opacity: 0;}#cursor.hover {  opacity: 0.1;  transform: scale(2.5);  -webkit-transform: scale(2.5);  -moz-transform: scale(2.5);  -ms-transform: scale(2.5);  -o-transform: scale(2.5);}#cursor.active {  opacity: 0.5;  transform: scale(0.5);  -webkit-transform: scale(0.5);  -moz-transform: scale(0.5);  -ms-transform: scale(0.5);  -o-transform: scale(0.5);}/* 首页文章卡片 */#recent-posts > .recent-post-item {  background: var(--trans-light);  backdrop-filter: var(--backdrop-filter);  border-radius: 25px;  border: var(--border-style);}/* 首页侧栏卡片 */#aside-content .card-widget {  background: var(--trans-light);  backdrop-filter: var(--backdrop-filter);  border-radius: 18px;  border: var(--border-style);}/* 文章页、归档页、普通页面 */div#post,div#page,div#archive {  background: var(--trans-light);  backdrop-filter: var(--backdrop-filter);  border: var(--border-style);  border-radius: 20px;}/* 导航栏 */#page-header.nav-fixed #nav {  background: rgba(255, 255, 255, 0.75);  backdrop-filter: var(--backdrop-filter);}[data-theme="dark"] #page-header.nav-fixed #nav {  background: rgba(0, 0, 0, 0.7) !important;}/* 夜间模式遮罩 */[data-theme="dark"] #recent-posts > .recent-post-item,[data-theme="dark"] #aside-content .card-widget,[data-theme="dark"] div#post,[data-theme="dark"] div#archive,[data-theme="dark"] div#page {  background: var(--trans-dark);}/* 夜间模式页脚页头遮罩透明 */[data-theme="dark"] #footer::before {  background: transparent !important;}[data-theme="dark"] #page-header::before {  background: transparent !important;}/* 阅读模式 */.read-mode #aside-content .card-widget {  background: rgba(158, 204, 171, 0.5) !important;}.read-mode div#post {  background: rgba(158, 204, 171, 0.5) !important;}/* 夜间模式下的阅读模式 */[data-theme="dark"] .read-mode #aside-content .card-widget {  background: rgba(25, 25, 25, 0.9) !important;  color: #ffffff;}[data-theme="dark"] .read-mode div#post {  background: rgba(25, 25, 25, 0.9) !important;  color: #ffffff;}/* 菜单图标大小 */svg.menu_icon {  width: 1.28em;  height: 1.28em;  vertical-align: -0.15em;  fill: currentColor;  overflow: hidden;}/* 社交图片大小 */svg.social_icon {  width: 1.20em;  height: 1.20em;  vertical-align: -0.15em;  fill: currentColor;  overflow: hidden;}]]></content>
+        <content type="html"><![CDATA[<!--GitCalendar容器--><div id="gitZone"></div>]]></content>
       
     </entry>
     
@@ -193,7 +215,29 @@
       <link href="/js/coin.js"/>
       <url>/js/coin.js</url>
       
-        <content type="html"><![CDATA[var tipButtons = document.querySelectorAll(".tip-button");function coinAudio() {  var coinAudio = document.getElementById("coinAudio");  if (coinAudio) {    coinAudio.play(); //有音频时播放  }}// Loop through all buttons (allows for multiple buttons on page)tipButtons.forEach(button => {  var coin = button.querySelector(".coin");  // The larger the number, the slower the animation  coin.maxMoveLoopCount = 90;  button.addEventListener("click", () => {    if (/Android|webOS|BlackBerry/i.test(navigator.userAgent)) return true; //媒体选择    if (button.clicked) return;    button.classList.add("clicked");    // Wait to start flipping th coin because of the button tilt animation    setTimeout(() => {      // Randomize the flipping speeds just for fun      coin.sideRotationCount = Math.floor(Math.random() * 5) * 90;      coin.maxFlipAngle = (Math.floor(Math.random() * 4) + 3) * Math.PI;      button.clicked = true;      flipCoin();      coinAudio();    }, 50);  });  var flipCoin = () => {    coin.moveLoopCount = 0;    flipCoinLoop();  };  var resetCoin = () => {    coin.style.setProperty("--coin-x-multiplier", 0);    coin.style.setProperty("--coin-scale-multiplier", 0);    coin.style.setProperty("--coin-rotation-multiplier", 0);    coin.style.setProperty("--shine-opacity-multiplier", 0.4);    coin.style.setProperty("--shine-bg-multiplier", "50%");    coin.style.setProperty("opacity", 1);    // Delay to give the reset animation some time before you can click again    setTimeout(() => {      button.clicked = false;    }, 300);  };  var flipCoinLoop = () => {    coin.moveLoopCount++;    var percentageCompleted = coin.moveLoopCount / coin.maxMoveLoopCount;    coin.angle = -coin.maxFlipAngle * Math.pow(percentageCompleted - 1, 2) + coin.maxFlipAngle;    // Calculate the scale and position of the coin moving through the air    coin.style.setProperty("--coin-y-multiplier", -11 * Math.pow(percentageCompleted * 2 - 1, 4) + 11);    coin.style.setProperty("--coin-x-multiplier", percentageCompleted);    coin.style.setProperty("--coin-scale-multiplier", percentageCompleted * 0.6);    coin.style.setProperty("--coin-rotation-multiplier", percentageCompleted * coin.sideRotationCount);    // Calculate the scale and position values for the different coin faces    // The math uses sin/cos wave functions to similate the circular motion of 3D spin    coin.style.setProperty("--front-scale-multiplier", Math.max(Math.cos(coin.angle), 0));    coin.style.setProperty("--front-y-multiplier", Math.sin(coin.angle));    coin.style.setProperty("--middle-scale-multiplier", Math.abs(Math.cos(coin.angle), 0));    coin.style.setProperty("--middle-y-multiplier", Math.cos((coin.angle + Math.PI / 2) % Math.PI));    coin.style.setProperty("--back-scale-multiplier", Math.max(Math.cos(coin.angle - Math.PI), 0));    coin.style.setProperty("--back-y-multiplier", Math.sin(coin.angle - Math.PI));    coin.style.setProperty("--shine-opacity-multiplier", 4 * Math.sin((coin.angle + Math.PI / 2) % Math.PI) - 3.2);    coin.style.setProperty("--shine-bg-multiplier", -40 * (Math.cos((coin.angle + Math.PI / 2) % Math.PI) - 0.5) + "%");    // Repeat animation loop    if (coin.moveLoopCount < coin.maxMoveLoopCount) {      if (coin.moveLoopCount === coin.maxMoveLoopCount - 6) button.classList.add("shrink-landing");      window.requestAnimationFrame(flipCoinLoop);    } else {      button.classList.add("coin-landed");      coin.style.setProperty("opacity", 0);      setTimeout(() => {        button.classList.remove("clicked", "shrink-landing", "coin-landed");        setTimeout(() => {          resetCoin();        }, 300);      }, 1500);    }  };});]]></content>
+        <content type="html"><![CDATA[var tipButtons = document.querySelectorAll('.tip-button')function coinAudio() {    var coinAudio = document.getElementById("coinAudio");    if (coinAudio) {        coinAudio.play();//有音频时播放    }}// Loop through all buttons (allows for multiple buttons on page)tipButtons.forEach((button) => {    var coin = button.querySelector('.coin')    // The larger the number, the slower the animation    coin.maxMoveLoopCount = 90    button.addEventListener('click', () => {        if (/Android|webOS|BlackBerry/i.test(navigator.userAgent)) return true; //媒体选择        if (button.clicked) return        button.classList.add('clicked')        // Wait to start flipping th coin because of the button tilt animation        setTimeout(() => {            // Randomize the flipping speeds just for fun            coin.sideRotationCount = Math.floor(Math.random() * 5) * 90            coin.maxFlipAngle = (Math.floor(Math.random() * 4) + 3) * Math.PI            button.clicked = true            flipCoin()            coinAudio()        }, 50)    })    var flipCoin = () => {        coin.moveLoopCount = 0        flipCoinLoop()    }    var resetCoin = () => {        coin.style.setProperty('--coin-x-multiplier', 0)        coin.style.setProperty('--coin-scale-multiplier', 0)        coin.style.setProperty('--coin-rotation-multiplier', 0)        coin.style.setProperty('--shine-opacity-multiplier', 0.4)        coin.style.setProperty('--shine-bg-multiplier', '50%')        coin.style.setProperty('opacity', 1)        // Delay to give the reset animation some time before you can click again        setTimeout(() => {            button.clicked = false        }, 300)    }    var flipCoinLoop = () => {        coin.moveLoopCount++        var percentageCompleted = coin.moveLoopCount / coin.maxMoveLoopCount        coin.angle = -coin.maxFlipAngle * Math.pow((percentageCompleted - 1), 2) + coin.maxFlipAngle        // Calculate the scale and position of the coin moving through the air        coin.style.setProperty('--coin-y-multiplier', -11 * Math.pow(percentageCompleted * 2 - 1, 4) + 11)        coin.style.setProperty('--coin-x-multiplier', percentageCompleted)        coin.style.setProperty('--coin-scale-multiplier', percentageCompleted * 0.6)        coin.style.setProperty('--coin-rotation-multiplier', percentageCompleted * coin.sideRotationCount)        // Calculate the scale and position values for the different coin faces        // The math uses sin/cos wave functions to similate the circular motion of 3D spin        coin.style.setProperty('--front-scale-multiplier', Math.max(Math.cos(coin.angle), 0))        coin.style.setProperty('--front-y-multiplier', Math.sin(coin.angle))        coin.style.setProperty('--middle-scale-multiplier', Math.abs(Math.cos(coin.angle), 0))        coin.style.setProperty('--middle-y-multiplier', Math.cos((coin.angle + Math.PI / 2) % Math.PI))        coin.style.setProperty('--back-scale-multiplier', Math.max(Math.cos(coin.angle - Math.PI), 0))        coin.style.setProperty('--back-y-multiplier', Math.sin(coin.angle - Math.PI))        coin.style.setProperty('--shine-opacity-multiplier', 4 * Math.sin((coin.angle + Math.PI / 2) % Math.PI) - 3.2)        coin.style.setProperty('--shine-bg-multiplier', -40 * (Math.cos((coin.angle + Math.PI / 2) % Math.PI) - 0.5) + '%')        // Repeat animation loop        if (coin.moveLoopCount < coin.maxMoveLoopCount) {            if (coin.moveLoopCount === coin.maxMoveLoopCount - 6) button.classList.add('shrink-landing')            window.requestAnimationFrame(flipCoinLoop)        } else {            button.classList.add('coin-landed')            coin.style.setProperty('opacity', 0)            setTimeout(() => {                button.classList.remove('clicked', 'shrink-landing', 'coin-landed')                setTimeout(() => {                    resetCoin()                }, 300)            }, 1500)        }    }})]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title></title>
+      <link href="/css/custom.css"/>
+      <url>/css/custom.css</url>
+      
+        <content type="html"><![CDATA[:root {  --trans-light: rgba(255, 255, 255, 0.88);  --trans-dark: rgba(25, 25, 25, 0.88);  --border-style: 1px solid rgb(169, 169, 169);  --backdrop-filter: blur(5px) saturate(150%);}/* 页脚与头图透明 */#footer {    background: transparent !important;  }  #page-header {    background: transparent !important;  }    /* 白天模式遮罩透明 */  #footer::before {    background: transparent !important;  }  #page-header::before {    background: transparent !important;  }    /* 夜间模式遮罩透明 */  [data-theme="dark"] #footer::before {    background: transparent !important;  }  [data-theme="dark"] #page-header::before {    background: transparent !important;  }  /* 小冰分类分类磁铁黑夜模式适配 *//* 一般状态 */ [data-theme="dark"] .magnet_link_context {  background: #1e1e1e;  color: antiquewhite;}/* 鼠标悬浮状态 */ [data-theme="dark"] .magnet_link_context:hover {  background: #3ecdf1;  color: #f2f2f2;}@font-face {  /* 为载入的字体取名字(随意) */  font-family: 'YSHST';  /* 字体文件地址(相对或者绝对路径都可以) */  src: url(/font/优设好身体.ttf);  /* 定义加粗样式(加粗多少) */  font-weight: normal;  /* 定义字体样式(斜体/非斜体) */  font-style: normal;  /* 定义显示样式 */  font-display: block;}/* 翻页按钮居中 */#pagination {  width: 100%;  margin: auto;}/* 一级菜单居中 */#nav .menus_items {  position: absolute !important;  width: fit-content !important;  left: 50% !important;  transform: translateX(-50%) !important;}/* 子菜单横向展示 */#nav .menus_items .menus_item:hover .menus_item_child {  display: flex !important;}/* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */.menus_items .menus_item:nth-child(5) .menus_item_child {  left: -38px;}/* 夜间模式菜单栏发光字 */[data-theme="dark"] #nav .site-page,[data-theme="dark"] #nav .menus_items .menus_item .menus_item_child li a {  /* text-shadow: 0 0 2px var(--theme-color) !important; */  text-shadow: 0 0 2px rgb(179,71,241) !important;}/* 手机端适配 */[data-theme="dark"] #sidebar #sidebar-menus .menus_items .site-page {  /* text-shadow: 0 0 2px var(--theme-color) !important; */  text-shadow: 0 0 2px rgb(179,71,241) !important;}/* 闪烁变动颜色连续渐变 */#site-name,#site-title,#site-subtitle,#post-info,.author-info__name,.author-info__description {  transition: text-shadow 1s linear !important;}/* 侧边栏个人信息卡片动态渐变色 */#aside-content > .card-widget.card-info {  background: linear-gradient(    -45deg,    #e8d8b9,    #eccec5,    #a3e9eb,    #bdbdf0,    #eec1ea  );  box-shadow: 0 0 5px rgb(66, 68, 68);  position: relative;  background-size: 400% 400%;  -webkit-animation: Gradient 10s ease infinite;  -moz-animation: Gradient 10s ease infinite;  animation: Gradient 10s ease infinite !important;}@-webkit-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@-moz-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}/* 黑夜模式适配 */[data-theme="dark"] #aside-content > .card-widget.card-info {  background: #191919ee;}/* 个人信息Follow me按钮 */#aside-content > .card-widget.card-info > #card-info-btn {  background-color: #3eb8be;  border-radius: 8px;}/* 鼠标样式 */#cursor {  position: fixed;  width: 16px;  height: 16px;  /* 这里改变跟随的底色 */  background: rgb(57,197,187);  border-radius: 8px;  opacity: 0.25;  z-index: 10086;  pointer-events: none;  transition: 0.2s ease-in-out;  transition-property: background, opacity, transform;}#cursor.hidden {  opacity: 0;}#cursor.hover {  opacity: 0.1;  transform: scale(2.5);  -webkit-transform: scale(2.5);  -moz-transform: scale(2.5);  -ms-transform: scale(2.5);  -o-transform: scale(2.5);}#cursor.active {  opacity: 0.5;  transform: scale(0.5);  -webkit-transform: scale(0.5);  -moz-transform: scale(0.5);  -ms-transform: scale(0.5);  -o-transform: scale(0.5);}/* 首页文章卡片 */#recent-posts > .recent-post-item {  background: var(--trans-light);  backdrop-filter: var(--backdrop-filter);  border-radius: 25px;  border: var(--border-style);}/* 首页侧栏卡片 */#aside-content .card-widget {  background: var(--trans-light);  backdrop-filter: var(--backdrop-filter);  border-radius: 18px;  border: var(--border-style);}/* 文章页、归档页、普通页面 */div#post,div#page,div#archive {  background: var(--trans-light);  backdrop-filter: var(--backdrop-filter);  border: var(--border-style);  border-radius: 20px;}/* 导航栏 */#page-header.nav-fixed #nav {  background: rgba(255, 255, 255, 0.75);  backdrop-filter: var(--backdrop-filter);}[data-theme="dark"] #page-header.nav-fixed #nav {  background: rgba(0, 0, 0, 0.7) !important;}/* 夜间模式遮罩 */[data-theme="dark"] #recent-posts > .recent-post-item,[data-theme="dark"] #aside-content .card-widget,[data-theme="dark"] div#post,[data-theme="dark"] div#archive,[data-theme="dark"] div#page {  background: var(--trans-dark);}/* 夜间模式页脚页头遮罩透明 */[data-theme="dark"] #footer::before {  background: transparent !important;}[data-theme="dark"] #page-header::before {  background: transparent !important;}/* 阅读模式 */.read-mode #aside-content .card-widget {  background: rgba(158, 204, 171, 0.5) !important;}.read-mode div#post {  background: rgba(158, 204, 171, 0.5) !important;}/* 夜间模式下的阅读模式 */[data-theme="dark"] .read-mode #aside-content .card-widget {  background: rgba(25, 25, 25, 0.9) !important;  color: #ffffff;}[data-theme="dark"] .read-mode div#post {  background: rgba(25, 25, 25, 0.9) !important;  color: #ffffff;}/* 菜单图标大小 */svg.menu_icon {  width: 1.28em;  height: 1.28em;  vertical-align: -0.15em;  fill: currentColor;  overflow: hidden;}/* 社交图片大小 */svg.social_icon {  width: 1.20em;  height: 1.20em;  vertical-align: -0.15em;  fill: currentColor;  overflow: hidden;}]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title></title>
+      <link href="/css/coin.css"/>
+      <url>/css/coin.css</url>
+      
+        <content type="html"><![CDATA[.tip-button {  border: 0;  border-radius: 0.25rem;  cursor: pointer;  font-size: 20px;  font-weight: 600;  height: 2.6rem;  margin-bottom: -4rem;  outline: 0;  position: relative;  top: 0;  transform-origin: 0% 100%;  transition: transform 50ms ease-in-out;  width: auto;  -webkit-tap-highlight-color: transparent;}.tip-button:active {  transform: rotate(4deg);}.tip-button.clicked {  animation: 150ms ease-in-out 1 shake;  pointer-events: none;}.tip-button.clicked .tip-button__text {  opacity: 0;  transition: opacity 100ms linear 200ms;}.tip-button.clicked::before {  height: 0.5rem;  width: 60%;  background: var(button-hover-color);}.tip-button.clicked .coin {  transition: margin-bottom 1s linear 200ms;  margin-bottom: 0;}.tip-button.shrink-landing::before {  transition: width 200ms ease-in;  width: 0;}.tip-button.coin-landed::after {  opacity: 1;  transform: scale(1);  transform-origin: 50% 100%;}.tip-button.coin-landed .coin-wrapper {  background: radial-gradient(circle at 35% 97%, rgba(3, 16, 50, 0.4) 0.04rem, transparent 0.04rem), radial-gradient(circle at 45% 92%, rgba(3, 16, 50, 0.4) 0.04rem, transparent 0.02rem), radial-gradient(circle at 55% 98%, rgba(3, 16, 50, 0.4) 0.04rem, transparent 0.04rem), radial-gradient(circle at 65% 96%, rgba(3, 16, 50, 0.4) 0.06rem, transparent 0.06rem);  background-position: center bottom;  background-size: 100%;  bottom: -1rem;  opacity: 0;  transform: scale(2) translateY(-10px);}.tip-button__text {  color: #fff;  margin-right: 1.8rem;  opacity: 1;  position: relative;  transition: opacity 100ms linear 500ms;  z-index: 3;}.tip-button::before {  border-radius: 0.25rem;  bottom: 0;  content: '';  display: block;  height: 100%;  left: 50%;  position: absolute;  transform: translateX(-50%);  transition: height 250ms ease-in-out 400ms, width 250ms ease-in-out 300ms;  width: 100%;  z-index: 2;}.tip-button::after {  bottom: -1rem;  color: white;  content: 'ヾ(≧O≦)〃嗷~'; /*点击后显示的内容*/  height: 110%;  left: 0;  opacity: 0;  position: absolute;  pointer-events: none;  text-align: center;  transform: scale(0);  transform-origin: 50% 20%;  transition: transform 200ms cubic-bezier(0, 0, 0.35, 1.43);  width: 100%;  z-index: 1;}.coin-wrapper {  background: none;  bottom: 0;  height: 18rem;  left: 0;  opacity: 1;  overflow: hidden;  pointer-events: none;  position: absolute;  transform: none;  transform-origin: 50% 100%;  transition: opacity 200ms linear 100ms, transform 300ms ease-out;  width: 100%;}.coin {  --front-y-multiplier: 0;  --back-y-multiplier: 0;  --coin-y-multiplier: 0;  --coin-x-multiplier: 0;  --coin-scale-multiplier: 0;  --coin-rotation-multiplier: 0;  --shine-opacity-multiplier: 0.4;  --shine-bg-multiplier: 50%;  bottom: calc(var(--coin-y-multiplier) * 1rem - 3.5rem);  height: 3.5rem;  margin-bottom: 3.05rem;  position: absolute;  right: calc(var(--coin-x-multiplier) * 34% + 16%);  transform: translateX(50%) scale(calc(0.4 + var(--coin-scale-multiplier))) rotate(calc(var(--coin-rotation-multiplier) * -1deg));  transition: opacity 100ms linear 200ms;  width: 3.5rem;  z-index: 3;}.coin__front, .coin__middle, .coin__back, .coin::before, .coin__front::after, .coin__back::after {  border-radius: 50%;  box-sizing: border-box;  height: 100%;  left: 0;  position: absolute;  width: 100%;  z-index: 3;}.coin__front {  background: radial-gradient(circle at 50% 50%, transparent 50%, rgba(115, 124, 153, 0.4) 54%, #c2cadf 54%), linear-gradient(210deg, #8590b3 32%, transparent 32%), linear-gradient(150deg, #8590b3 32%, transparent 32%), linear-gradient(to right, #8590b3 22%, transparent 22%, transparent 78%, #8590b3 78%), linear-gradient(to bottom, #fcfaf9 44%, transparent 44%, transparent 65%, #fcfaf9 65%, #fcfaf9 71%, #8590b3 71%), linear-gradient(to right, transparent 28%, #fcfaf9 28%, #fcfaf9 34%, #8590b3 34%, #8590b3 40%, #fcfaf9 40%, #fcfaf9 47%, #8590b3 47%, #8590b3 53%, #fcfaf9 53%, #fcfaf9 60%, #8590b3 60%, #8590b3 66%, #fcfaf9 66%, #fcfaf9 72%, transparent 72%);  background-color: #8590b3;  background-size: 100% 100%;  transform: translateY(calc(var(--front-y-multiplier) * 0.3181818182rem / 2)) scaleY(var(--front-scale-multiplier));}.coin__front::after {  background: rgba(0, 0, 0, 0.2);  content: '';  opacity: var(--front-y-multiplier);}.coin__middle {  background: #737c99;  transform: translateY(calc(var(--middle-y-multiplier) * 0.3181818182rem / 2)) scaleY(var(--middle-scale-multiplier));}.coin__back {  background: radial-gradient(circle at 50% 50%, transparent 50%, rgba(115, 124, 153, 0.4) 54%, #c2cadf 54%), radial-gradient(circle at 50% 40%, #fcfaf9 23%, transparent 23%), radial-gradient(circle at 50% 100%, #fcfaf9 35%, transparent 35%);  background-color: #8590b3;  background-size: 100% 100%;  transform: translateY(calc(var(--back-y-multiplier) * 0.3181818182rem / 2)) scaleY(var(--back-scale-multiplier));}.coin__back::after {  background: rgba(0, 0, 0, 0.2);  content: '';  opacity: var(--back-y-multiplier);}.coin::before {  background: radial-gradient(circle at 25% 65%, transparent 50%, rgba(255, 255, 255, 0.9) 90%), linear-gradient(55deg, transparent calc(var(--shine-bg-multiplier) + 0%), #e9f4ff calc(var(--shine-bg-multiplier) + 0%), transparent calc(var(--shine-bg-multiplier) + 50%));  content: '';  opacity: var(--shine-opacity-multiplier);  transform: translateY(calc(var(--middle-y-multiplier) * 0.3181818182rem / -2)) scaleY(var(--middle-scale-multiplier)) rotate(calc(var(--coin-rotation-multiplier) * 1deg));  z-index: 10;}.coin::after {  background: #737c99;  content: '';  height: 0.3181818182rem;  left: 0;  position: absolute;  top: 50%;  transform: translateY(-50%);  width: 100%;  z-index: 2;}@keyframes shake {  0% {    transform: rotate(4deg);  }  66% {    transform: rotate(-4deg);  }  100% {    transform: rotate();  }}]]></content>
       
     </entry>
     
@@ -205,17 +249,6 @@
       <url>/js/cursor.js</url>
       
         <content type="html"><![CDATA[var CURSOR;Math.lerp = (a, b, n) => (1 - n) * a + n * b;const getStyle = (el, attr) => {    try {        return window.getComputedStyle            ? window.getComputedStyle(el)[attr]            : el.currentStyle[attr];    } catch (e) {}    return "";};class Cursor {    constructor() {        this.pos = {curr: null, prev: null};        this.pt = [];        this.create();        this.init();        this.render();    }    move(left, top) {        this.cursor.style["left"] = `${left}px`;        this.cursor.style["top"] = `${top}px`;    }    create() {        if (!this.cursor) {            this.cursor = document.createElement("div");            this.cursor.id = "cursor";            this.cursor.classList.add("hidden");            document.body.append(this.cursor);        }        var el = document.getElementsByTagName('*');        for (let i = 0; i < el.length; i++)            if (getStyle(el[i], "cursor") == "pointer")                this.pt.push(el[i].outerHTML);        document.body.appendChild((this.scr = document.createElement("style")));        // 这里改变鼠标指针的颜色 由svg生成        this.scr.innerHTML = `* {cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' width='8px' height='8px'><circle cx='4' cy='4' r='4' opacity='1.0' fill='rgb(57, 197, 187)'/></svg>") 4 4, auto}`;    }    refresh() {        this.scr.remove();        this.cursor.classList.remove("hover");        this.cursor.classList.remove("active");        this.pos = {curr: null, prev: null};        this.pt = [];        this.create();        this.init();        this.render();    }    init() {        document.onmouseover  = e => this.pt.includes(e.target.outerHTML) && this.cursor.classList.add("hover");        document.onmouseout   = e => this.pt.includes(e.target.outerHTML) && this.cursor.classList.remove("hover");        document.onmousemove  = e => {(this.pos.curr == null) && this.move(e.clientX - 8, e.clientY - 8); this.pos.curr = {x: e.clientX - 8, y: e.clientY - 8}; this.cursor.classList.remove("hidden");};        document.onmouseenter = e => this.cursor.classList.remove("hidden");        document.onmouseleave = e => this.cursor.classList.add("hidden");        document.onmousedown  = e => this.cursor.classList.add("active");        document.onmouseup    = e => this.cursor.classList.remove("active");    }    render() {        if (this.pos.prev) {            this.pos.prev.x = Math.lerp(this.pos.prev.x, this.pos.curr.x, 0.15);            this.pos.prev.y = Math.lerp(this.pos.prev.y, this.pos.curr.y, 0.15);            this.move(this.pos.prev.x, this.pos.prev.y);        } else {            this.pos.prev = this.pos.curr;        }        requestAnimationFrame(() => this.render());    }}(() => {    CURSOR = new Cursor();    // 需要重新获取列表时，使用 CURSOR.refresh()})();]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>link</title>
-      <link href="/link/index.html"/>
-      <url>/link/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
       
     </entry>
     
@@ -255,9 +288,9 @@
     
     
     <entry>
-      <title>电影</title>
-      <link href="/movies/index.html"/>
-      <url>/movies/index.html</url>
+      <title>link</title>
+      <link href="/link/index.html"/>
+      <url>/link/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -269,6 +302,17 @@
       <title>tags</title>
       <link href="/tags/index.html"/>
       <url>/tags/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>电影</title>
+      <link href="/movies/index.html"/>
+      <url>/movies/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
